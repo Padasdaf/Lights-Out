@@ -1,1 +1,1 @@
-# Lights-Out
+# Lights Out

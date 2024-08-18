@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lights Out Game</title>
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <!-- Start Page: Displays the game rules and a button to start the game -->
+    <div id="start-page">
+        <h1>Welcome to Lights Out!</h1>
+        <p>The goal of the game is simple: Turn off all the lights on the grid.</p>
+        <p>Clicking on a light will toggle it and its adjacent lights on or off.</p>
+        <p>You have <strong>three hints</strong> to help you find a light to toggle, but use them wisely!</p>
+        <p>Good luck and have fun!</p>
+        <button id="start-game-btn">Start Game</button>
+    </div>
+
+    <!-- Game Container: Contains the game interface and controls -->
+    <div id="game-container" style="display: none;">
+        <h1>Lights Out</h1>
+        <div id="controls">
+            <div id="settings">
+                <!-- Grid Size and Difficulty settings -->
+                <label for="grid-size">Grid Size:</label>
+                <select id="grid-size">
+                    <option value="3">3x3</option>
+                    <option value="5" selected>5x5</option>
+                    <option value="7">7x7</option>
+                    <option value="10">10x10</option>
+                </select>
+                <label for="difficulty">Difficulty:</label>
+                <select id="difficulty">
+                    <option value="easy" selected>Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+            <div id="buttons">
+                <!-- Game control buttons -->
+                <button id="start-btn">Start New Game</button>
+                <button id="reset-btn">Reset Game</button>
+                <button id="hint-btn">Hint</button>
+                <button id="undo-btn">Undo</button>
+                <button id="menu-btn" class="menu-button">Return to Menu</button>
+            </div>
+        </div>
+        <!-- Game board where the lights are displayed -->
+        <div id="game-board"></div>
+        <!-- Scoreboard displaying moves, time, and hints left -->
+        <div id="scoreboard">
+            <div id="score-details">
+                <p>Moves: <span id="move-count">0</span></p>
+                <p>Time: <span id="time">0:00</span></p>
+                <p>Hints Left: <span id="hints-left">3</span></p>
+            </div>
+            <p id="message"></p>
+        </div>
+    </div>
+
+    <!-- Audio files for game sounds, now in the 'sounds' folder -->
+    <audio id="click-sound" src="sounds/click.mp3" preload="auto"></audio>
+    <audio id="win-sound" src="sounds/win.mp3" preload="auto"></audio>
+    <audio id="hint-sound" src="sounds/hint.mp3" preload="auto"></audio>
+    <audio id="undo-sound" src="sounds/undo.mp3" preload="auto"></audio>
+    <audio id="start-sound" src="sounds/start.mp3" preload="auto"></audio>
+    <audio id="reset-sound" src="sounds/reset.mp3" preload="auto"></audio>
+    <audio id="menu-sound" src="sounds/menu.mp3" preload="auto"></audio>
+    <!-- Link to the JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>

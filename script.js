@@ -37,6 +37,36 @@ $(document).ready(function() {
     });
 });
 
+let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+
+// Function to save the time to the leaderboard
+function saveToLeaderboard(time) {
+    leaderboard.push(time);
+    leaderboard.sort((a, b) => a - b);
+    if (leaderboard.length > 10) {
+        leaderboard.pop(); // Keep only top 10 times
+    }
+    localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+    displayLeaderboard();
+}
+
+// Function to display the leaderboard
+function displayLeaderboard() {
+    const $leaderboard = $('#leaderboard');
+    $leaderboard.empty();
+
+    leaderboard.forEach((time, index) => {
+        $leaderboard.append(`<li>${index + 1}. ${formatTime(time)}</li>`);
+    });
+
+    $('#leaderboard-container').show();
+}
+
+// Function to hide the leaderboard
+$('#close-leaderboard-btn').click(function() {
+    $('#leaderboard-container').hide();
+});
+
 // Function to show the game container and start the game
 function showGameContainer() {
     // Retrieve and store the selected grid size and difficulty level
@@ -158,8 +188,9 @@ function checkWinCondition() {
         clearInterval(timer);
         playSound('win');
         $('#message').text('You win! All lights are off.');
+
         if (timedMode) {
-            calculateScore();
+            saveToLeaderboard(timeElapsed);
         }
         triggerConfetti();
     }
@@ -206,6 +237,7 @@ function resetGame() {
 // Function to return to the main menu
 function returnToMenu() {
     $('#game-container').hide();
+    $('#leaderboard-container').hide();
     $('#start-page').show();
     playSound('menu');
 }

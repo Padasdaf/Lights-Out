@@ -1,0 +1,234 @@
+/* Basic styles for the body and containers */
+body {
+    font-family: Arial, sans-serif;
+    background: url('images/background.png') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style for the start page and game container */
+#start-page, #game-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 80%;
+    max-width: 600px;
+    animation: fadeIn 1s ease-in-out;
+    position: relative; /* Needed to position the reset button inside this container */
+}
+
+/* Additional margin between difficulty selector and start button */
+#start-page #settings {
+    margin-bottom: 20px;
+}
+
+/* Header styles */
+#start-page h1, #game-container h1 {
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Paragraph styles on the start page */
+#start-page p {
+    font-size: 18px;
+    margin: 15px 0;
+}
+
+/* Button style on the start page */
+#start-game-btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for the start game button */
+#start-game-btn:hover {
+    background-color: #218838;
+}
+
+/* Style for the reset settings button, positioned at the bottom right */
+#reset-settings-btn {
+    padding: 5px 10px; /* Smaller button size */
+    font-size: 14px; /* Smaller font size */
+    font-weight: 500;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: #6c757d; /* Matching the "Return to Menu" button color */
+    color: white;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for the reset button */
+#reset-settings-btn:hover {
+    background-color: #5a6268;
+}
+
+/* Control panel styles */
+#controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+/* Button styles in the control panel */
+#buttons {
+    display: flex;
+    gap: 15px;
+}
+
+#buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Styles for each specific button */
+#start-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+#start-btn:hover {
+    background-color: #218838;
+}
+
+#reset-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+#reset-btn:hover {
+    background-color: #c82333;
+}
+
+#hint-btn {
+    background-color: #ffc107;
+    color: white;
+}
+
+#hint-btn:hover {
+    background-color: #e0a800;
+}
+
+#undo-btn {
+    background-color: #17a2b8;
+    color: white;
+}
+
+#undo-btn:hover {
+    background-color: #138496;
+}
+
+/* Style for the "Return to Menu" button */
+#menu-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+#menu-btn:hover {
+    background-color: #5a6268;
+}
+
+/* Game board layout */
+#game-board {
+    display: grid;
+    gap: 5px;
+    margin: 20px 0;
+    justify-content: center;
+}
+
+/* Custom light styles with gradients */
+.light {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(145deg, #333, #444);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transform: scale(1);
+}
+
+/* Style when the light is on */
+.light.on {
+    background: linear-gradient(145deg, #ffdd57, #ffd700);
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(255, 221, 87, 0.5);
+    animation: lightPulse 0.5s ease-in-out infinite alternate;
+}
+
+/* Style for the hint */
+.light.hint {
+    background: linear-gradient(145deg, #4caf50, #388e3c);
+    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.5);
+    animation: hintPulse 1s ease-in-out infinite alternate;
+}
+
+/* Win message style */
+#message {
+    font-size: 20px;
+    color: green;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+/* Animations */
+@keyframes lightPulse {
+    from {
+        transform: scale(1.1);
+    }
+    to {
+        transform: scale(1.15);
+    }
+}
+
+@keyframes hintPulse {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.1);
+    }
+}
+
+/* Confetti animation */
+@keyframes confettiFall {
+    from {
+        transform: translateY(-100vh) rotate(0deg);
+    }
+    to {
+        transform: translateY(100vh) rotate(720deg);
+    }
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #ffdd57;
+    opacity: 0.8;
+    z-index: 1000;
+    border-radius: 50%;
+    animation: confettiFall 3s linear infinite;
+}

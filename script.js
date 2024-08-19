@@ -9,7 +9,6 @@ let undoStack = [];
 let timedMode = false;
 let lightColor = '#ffdd57'; // Default light color
 
-// Initialize the game when the document is ready
 $(document).ready(function() {
     $('#start-game-btn').click(showGameContainer);
     $('#start-btn').click(startNewGame);
@@ -22,7 +21,6 @@ $(document).ready(function() {
         lightColor = $(this).val();
     });
 
-    // Add sound effects to grid size and difficulty selectors
     $('#grid-size').change(function() {
         playSound('menu');
     });
@@ -31,7 +29,6 @@ $(document).ready(function() {
         playSound('menu');
     });
 
-    // Play "undo" sound when "Timed Mode" is toggled
     $('#timed-mode').change(function() {
         playSound('undo');
     });
@@ -39,18 +36,16 @@ $(document).ready(function() {
 
 let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
 
-// Function to save the time to the leaderboard
 function saveToLeaderboard(time) {
     leaderboard.push(time);
     leaderboard.sort((a, b) => a - b);
     if (leaderboard.length > 10) {
-        leaderboard.pop(); // Keep only top 10 times
+        leaderboard.pop();
     }
     localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
     displayLeaderboard();
 }
 
-// Function to display the leaderboard
 function displayLeaderboard() {
     const $leaderboard = $('#leaderboard');
     $leaderboard.empty();
@@ -62,25 +57,21 @@ function displayLeaderboard() {
     $('#leaderboard-container').show();
 }
 
-// Function to hide the leaderboard
 $('#close-leaderboard-btn').click(function() {
     $('#leaderboard-container').hide();
 });
 
-// Function to show the game container and start the game
 function showGameContainer() {
-    // Retrieve and store the selected grid size and difficulty level
     boardSize = parseInt($('#grid-size').val());
     difficulty = $('#difficulty').val();
     timedMode = $('#timed-mode').is(':checked');
 
     $('#start-page').hide();
     $('#game-container').show();
-    startGame(); // Start the game when the player moves to the game screen
+    startGame();
     playSound('start');
 }
 
-// Function to initialize or restart the game
 function startGame() {
     moveCount = 0;
     timeElapsed = 0;
@@ -97,20 +88,17 @@ function startGame() {
     startTimer();
 }
 
-// Function to start a new game (separate from initialization)
 function startNewGame() {
     startGame();
     playSound('start');
 }
 
-// Function to create the game board grid
 function createBoard() {
     const $boardElement = $('#game-board');
     $boardElement.css('grid-template-columns', `repeat(${boardSize}, 60px)`);
     $boardElement.empty();
     gameBoard = [];
 
-    // Create the grid based on the selected board size
     for (let i = 0; i < boardSize; i++) {
         const row = [];
         for (let j = 0; j < boardSize; j++) {
@@ -127,13 +115,12 @@ function createBoard() {
                 });
 
             $boardElement.append($light);
-            row.push(false); // Initially, all lights are off
+            row.push(false);
         }
         gameBoard.push(row);
     }
 }
 
-// Function to toggle the light and its neighbors
 function toggleLights(row, col) {
     toggleLight(row, col);
     if (row > 0) toggleLight(row - 1, col);
@@ -144,7 +131,6 @@ function toggleLights(row, col) {
     checkWinCondition();
 }
 
-// Function to toggle a single light on or off
 function toggleLight(row, col) {
     gameBoard[row][col] = !gameBoard[row][col];
     const $light = $(`.light[data-row="${row}"][data-col="${col}"]`);
@@ -155,7 +141,6 @@ function toggleLight(row, col) {
     }
 }
 
-// Function to generate a solvable board configuration or impossible board
 function generateSolvableBoard(difficulty) {
     const moves = difficulty === 'easy' ? 10 : difficulty === 'medium' ? 25 : difficulty === 'hard' ? 50 : 100;
     for (let i = 0; i < moves; i++) {
@@ -165,7 +150,6 @@ function generateSolvableBoard(difficulty) {
     }
 }
 
-// Function to start the game timer
 function startTimer() {
     clearInterval(timer);
     timer = setInterval(function() {
@@ -174,14 +158,12 @@ function startTimer() {
     }, 1000);
 }
 
-// Function to format the elapsed time as mm:ss
 function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
     const remainderSeconds = seconds % 60;
     return `${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`;
 }
 
-// Function to check if the player has won the game
 function checkWinCondition() {
     const allOff = gameBoard.every(row => row.every(light => !light));
     if (allOff) {
@@ -196,7 +178,6 @@ function checkWinCondition() {
     }
 }
 
-// Function to trigger the confetti animation
 function triggerConfetti() {
     const confettiCount = 50;
     const $gameContainer = $('#game-container');
@@ -215,12 +196,10 @@ function triggerConfetti() {
 
         $gameContainer.append($confetti);
 
-        // Remove confetti after animation
         setTimeout(() => $confetti.remove(), 3000);
     }
 }
 
-// Function to reset the game
 function resetGame() {
     clearInterval(timer);
     $('#time').text('0:00');
@@ -228,7 +207,6 @@ function resetGame() {
     playSound('reset');
 }
 
-// Function to return to the main menu
 function returnToMenu() {
     $('#game-container').hide();
     $('#leaderboard-container').hide();
@@ -236,7 +214,6 @@ function returnToMenu() {
     playSound('menu');
 }
 
-// Function to reset settings to default values
 function resetSettings() {
     $('#grid-size').val('5');
     $('#difficulty').val('easy');
@@ -245,73 +222,92 @@ function resetSettings() {
     playSound('menu');
 }
 
+// Solver function using Gaussian elimination
+function solveLightsOut(board) {
+    const n = board.length;
+    const matrix = [];
+    
+    // Create augmented matrix
+    for (let i = 0; i < n * n; i++) {
+        matrix[i] = new Array(n * n).fill(0);
+        const row = Math.floor(i / n);
+        const col = i % n;
+        matrix[i][i] = 1;
+
+        // Neighbors
+        if (row > 0) matrix[i][i - n] = 1; // Above
+        if (row < n - 1) matrix[i][i + n] = 1; // Below
+        if (col > 0) matrix[i][i - 1] = 1; // Left
+        if (col < n - 1) matrix[i][i + 1] = 1; // Right
+    }
+
+    const b = board.flat().map(x => x ? 1 : 0); // Convert board to a flat array
+
+    // Gaussian elimination
+    for (let i = 0; i < n * n; i++) {
+        if (matrix[i][i] === 0) {
+            for (let j = i + 1; j < n * n; j++) {
+                if (matrix[j][i] === 1) {
+                    [matrix[i], matrix[j]] = [matrix[j], matrix[i]];
+                    [b[i], b[j]] = [b[j], b[i]];
+                    break;
+                }
+            }
+        }
+
+        for (let j = i + 1; j < n * n; j++) {
+            if (matrix[j][i] === 1) {
+                for (let k = i; k < n * n; k++) {
+                    matrix[j][k] ^= matrix[i][k];
+                }
+                b[j] ^= b[i];
+            }
+        }
+    }
+
+    const solution = Array(n * n).fill(0);
+    for (let i = n * n - 1; i >= 0; i--) {
+        solution[i] = b[i];
+        for (let j = i + 1; j < n * n; j++) {
+            solution[i] ^= matrix[i][j] * solution[j];
+        }
+    }
+
+    return solution;
+}
+
+// Function to apply the solution to the board (for hints or solving)
+function applySolution(solution, boardSize) {
+    for (let i = 0; i < solution.length; i++) {
+        if (solution[i] === 1) {
+            const row = Math.floor(i / boardSize);
+            const col = i % boardSize;
+            toggleLights(row, col); // Apply each step of the solution
+        }
+    }
+}
+
 // Function to provide a hint by highlighting a strategic light
 function useHint() {
     if (hintsLeft > 0) {
-        let bestHint = null;
-        let bestImpact = -Infinity;
+        const solution = solveLightsOut(gameBoard);
+        for (let i = 0; i < solution.length; i++) {
+            if (solution[i] === 1) {
+                const row = Math.floor(i / boardSize);
+                const col = i % boardSize;
+                const $hintElement = $(`.light[data-row="${row}"][data-col="${col}"]`);
+                $hintElement.addClass('hint').css('background', `linear-gradient(145deg, #4caf50, #388e3c)`);
+                setTimeout(() => $hintElement.removeClass('hint').css('background', `linear-gradient(145deg, ${gameBoard[row][col] ? lightColor : '#333'}, ${gameBoard[row][col] ? lightColor : '#444'})`), 1000);
 
-        // Iterate through all lights to find the best move
-        for (let i = 0; i < boardSize; i++) {
-            for (let j = 0; j < boardSize; j++) {
-                const impact = calculateImpact(i, j);
-                if (impact > bestImpact) {
-                    bestHint = { row: i, col: j };
-                    bestImpact = impact;
-                }
+                hintsLeft--;
+                $('#hints-left').text(hintsLeft);
+                playSound('hint');
+                return;
             }
-        }
-
-        // Fallback: If no impactful hint is found, select the first unlit light
-        if (!bestHint) {
-            for (let i = 0; i < boardSize; i++) {
-                for (let j = 0; j < boardSize; j++) {
-                    if (!gameBoard[i][j]) { // Find the first unlit light as a fallback
-                        bestHint = { row: i, col: j };
-                        break;
-                    }
-                }
-                if (bestHint) break;
-            }
-        }
-
-        // Apply the hint and highlight it
-        if (bestHint) {
-            const $hintElement = $(`.light[data-row="${bestHint.row}"][data-col="${bestHint.col}"]`);
-            $hintElement.addClass('hint').css('background', `linear-gradient(145deg, #4caf50, #388e3c)`);
-            setTimeout(() => $hintElement.removeClass('hint').css('background', `linear-gradient(145deg, ${gameBoard[bestHint.row][bestHint.col] ? lightColor : '#333'}, ${gameBoard[bestHint.row][bestHint.col] ? lightColor : '#444'})`), 1000);
-
-            hintsLeft--;
-            $('#hints-left').text(hintsLeft);
-            playSound('hint');
         }
     } else {
-        // Show a pop-up message if no hints are left
         alert('No hints left!');
     }
-}
-
-// Function to calculate the impact of toggling a light
-function calculateImpact(row, col) {
-    let impact = 0;
-
-    // Simulate the effect of toggling this light and its neighbors
-    impact += checkToggleEffect(row, col); // Current light
-    impact += checkToggleEffect(row - 1, col); // Above
-    impact += checkToggleEffect(row + 1, col); // Below
-    impact += checkToggleEffect(row, col - 1); // Left
-    impact += checkToggleEffect(row, col + 1); // Right
-
-    return impact;
-}
-
-// Function to check the effect of toggling a specific light
-function checkToggleEffect(row, col) {
-    // If the light is within the grid and is on, toggling it off is beneficial
-    if (row >= 0 && row < boardSize && col >= 0 && col < boardSize) {
-        return gameBoard[row][col] ? 1 : 0;
-    }
-    return 0;
 }
 
 // Function to undo the last move
@@ -325,7 +321,6 @@ function undoMove() {
     }
 }
 
-// Function to play sound effects
 function playSound(sound) {
     const audio = $(`#${sound}-sound`)[0];
     audio.currentTime = 0;

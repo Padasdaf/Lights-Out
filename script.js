@@ -196,12 +196,6 @@ function checkWinCondition() {
     }
 }
 
-// Function to calculate and display the player's score
-function calculateScore() {
-    const score = 10000 - timeElapsed * 10;
-    alert(`Your score is: ${score}`);
-}
-
 // Function to trigger the confetti animation
 function triggerConfetti() {
     const confettiCount = 50;
@@ -284,8 +278,8 @@ function useHint() {
         // Apply the hint and highlight it
         if (bestHint) {
             const $hintElement = $(`.light[data-row="${bestHint.row}"][data-col="${bestHint.col}"]`);
-            $hintElement.addClass('hint');
-            setTimeout(() => $hintElement.removeClass('hint'), 1000);
+            $hintElement.addClass('hint').css('background', `linear-gradient(145deg, #4caf50, #388e3c)`);
+            setTimeout(() => $hintElement.removeClass('hint').css('background', `linear-gradient(145deg, ${gameBoard[bestHint.row][bestHint.col] ? lightColor : '#333'}, ${gameBoard[bestHint.row][bestHint.col] ? lightColor : '#444'})`), 1000);
 
             hintsLeft--;
             $('#hints-left').text(hintsLeft);

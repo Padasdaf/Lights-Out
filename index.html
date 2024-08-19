@@ -46,8 +46,8 @@
             <p><label for="light-color">Light Color:</label> <input type="color" id="light-color" value="#ffdd57"></p>
         </div>
 
-        <button id="start-game-btn">Start Game</button>
         <button id="reset-settings-btn">Reset to Default Settings</button>
+        <button id="start-game-btn">Start Game</button>
     </div>
 
     <!-- Game Container: Contains the game interface and controls -->
@@ -60,7 +60,6 @@
                 <button id="reset-btn">Reset Game</button>
                 <button id="hint-btn">Hint</button>
                 <button id="undo-btn">Undo</button>
-                <button id="menu-btn" class="menu-button">Return to Menu</button>
             </div>
         </div>
         <!-- Game board where the lights are displayed -->
@@ -71,6 +70,7 @@
                 <p>Moves: <span id="move-count">0</span></p>
                 <p>Time: <span id="time">0:00</span></p>
                 <p>Hints Left: <span id="hints-left">3</span></p>
+                <button id="menu-btn" class="menu-button">Return to Menu</button>
             </div>
             <p id="message"></p>
         </div>

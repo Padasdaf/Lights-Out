@@ -8,7 +8,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
 }
 
 /* Style for the start page and game container */
@@ -24,50 +23,22 @@ body {
     position: relative;
 }
 
-/* Adjustments for smaller screens */
-@media (max-width: 600px) {
-    body {
-        justify-content: flex-start;
-        padding-top: 20px;
-    }
-    
-    #start-page, #game-container {
-        width: 90%;
-        max-width: 400px;
-        padding: 20px;
-    }
+/* Additional margin between difficulty selector and start button */
+#start-page #settings {
+    margin-bottom: 20px;
+}
 
-    #start-game-btn, #reset-settings-btn, #close-leaderboard-btn {
-        padding: 10px;
-        font-size: 16px;
-    }
+/* Centering the buttons on the start page */
+#reset-settings-btn, #start-game-btn {
+    margin: 10px auto;
+    display: block;
+    width: 70%;
+}
 
-    #settings select, #settings input[type="color"], #buttons button {
-        font-size: 14px;
-        padding: 8px;
-    }
-
-    #game-board {
-        gap: 3px;
-    }
-
-    .light {
-        width: 40px;
-        height: 40px;
-    }
-
-    #leaderboard-container {
-        width: 85%;
-        max-width: 300px;
-    }
-
-    #leaderboard li {
-        font-size: 16px;
-    }
-
-    #score-details p, #message {
-        font-size: 16px;
-    }
+/* Reduce size of the Reset to Default Settings button */
+#reset-settings-btn {
+    font-size: 14px;
+    padding: 8px 16px;
 }
 
 /* Header styles */
@@ -101,19 +72,16 @@ body {
     background-color: #218838;
 }
 
-/* Style for the reset settings button, positioned at the bottom right */
+/* Style for the reset settings button */
 #reset-settings-btn {
-    padding: 5px 10px; /* Smaller button size */
-    font-size: 14px; /* Smaller font size */
+    padding: 8px 16px;
+    font-size: 14px;
     font-weight: 500;
     border-radius: 10px;
     border: none;
     cursor: pointer;
-    background-color: #6c757d; /* Matching the "Return to Menu" button color */
+    background-color: #6c757d;
     color: white;
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
     transition: background-color 0.3s ease;
 }
 
@@ -125,7 +93,7 @@ body {
 /* Control panel styles */
 #controls {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Center the buttons */
     margin-bottom: 20px;
 }
 
@@ -186,6 +154,8 @@ body {
 #menu-btn {
     background-color: #6c757d;
     color: white;
+    margin-top: 15px;
+    width: 100%;
 }
 
 #menu-btn:hover {
@@ -210,6 +180,7 @@ body {
     cursor: pointer;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     transform: scale(1);
+    animation: darkPulse 1s ease-in-out infinite alternate; /* Add subtle glow for unlit squares */
 }
 
 /* Style when the light is on */
@@ -292,6 +263,17 @@ body {
     }
 }
 
+@keyframes darkPulse {
+    from {
+        transform: scale(1);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    }
+    to {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+}
+
 @keyframes hintPulse {
     from {
         transform: scale(1);
@@ -320,4 +302,38 @@ body {
     z-index: 1000;
     border-radius: 50%;
     animation: confettiFall 3s linear infinite;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 600px) {
+    /* Adjusting the game board for smaller screens */
+    #game-board {
+        gap: 3px 0; /* Remove horizontal gaps, keep vertical */
+    }
+
+    /* Reduce the size of lights for smaller screens */
+    .light {
+        width: 45px;
+        height: 45px;
+    }
+
+    /* Adjust button sizes for mobile */
+    #buttons button {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    /* Center the buttons on mobile */
+    #controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Position the return to menu button under hints left text */
+    #menu-btn {
+        margin-top: 15px;
+        display: block;
+        width: 100%;
+    }
 }

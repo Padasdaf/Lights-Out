@@ -84,8 +84,24 @@ function startGame() {
     $('#message').text('');
 
     createBoard();
-    generateSolvableBoard(difficulty);
-    startTimer();
+
+    // Add flicker effect when the game starts
+    $('.light').addClass('flicker');
+
+    // Delay the randomization and win check to ensure the board is fully set up
+    setTimeout(() => {
+        generateSolvableBoard(difficulty);
+        // Double-check to ensure the board isn't falsely triggering a win
+        if (checkWinCondition(true)) {
+            generateSolvableBoard(difficulty);
+        }
+        startTimer();
+    }, 100);
+
+    // Remove flicker effect after it's done
+    setTimeout(() => {
+        $('.light').removeClass('flicker');
+    }, 600);
 }
 
 function startNewGame() {
@@ -148,6 +164,11 @@ function generateSolvableBoard(difficulty) {
         const col = Math.floor(Math.random() * boardSize);
         toggleLights(row, col);
     }
+
+    // Ensure that the board isn't fully solved after randomization
+    if (gameBoard.every(row => row.every(light => !light))) {
+        generateSolvableBoard(difficulty); // Re-randomize if accidentally solved
+    }
 }
 
 function startTimer() {
@@ -164,18 +185,22 @@ function formatTime(seconds) {
     return `${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`;
 }
 
-function checkWinCondition() {
+function checkWinCondition(skipConfetti = false) {
     const allOff = gameBoard.every(row => row.every(light => !light));
     if (allOff) {
-        clearInterval(timer);
-        playSound('win');
-        $('#message').text('You win! All lights are off.');
+        if (!skipConfetti) {
+            clearInterval(timer);
+            playSound('win');
+            $('#message').text('You win! All lights are off.');
 
-        if (timedMode) {
-            saveToLeaderboard(timeElapsed);
+            if (timedMode) {
+                saveToLeaderboard(timeElapsed);
+            }
+            triggerConfetti();
         }
-        triggerConfetti();
+        return true;
     }
+    return false;
 }
 
 function triggerConfetti() {
@@ -227,14 +252,12 @@ function solveLightsOut(board) {
     const n = board.length;
     const matrix = [];
     
-    // Create augmented matrix
     for (let i = 0; i < n * n; i++) {
         matrix[i] = new Array(n * n).fill(0);
         const row = Math.floor(i / n);
         const col = i % n;
         matrix[i][i] = 1;
 
-        // Neighbors
         if (row > 0) matrix[i][i - n] = 1; // Above
         if (row < n - 1) matrix[i][i + n] = 1; // Below
         if (col > 0) matrix[i][i - 1] = 1; // Left

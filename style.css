@@ -150,7 +150,10 @@ body {
     background-color: #138496;
 }
 
-/* Style for the "Return to Menu" button */
+/* Style for the "Return to MenuIt appears my previous response was cut off. Here's the rest of the CSS code and the full JavaScript with the flickering effect added:
+
+### **CSS (style.css) Continued**
+```css
 #menu-btn {
     background-color: #6c757d;
     color: white;
@@ -196,6 +199,20 @@ body {
     background: linear-gradient(145deg, #4caf50, #388e3c);
     box-shadow: 0 8px 20px rgba(76, 175, 80, 0.5);
     animation: hintPulse 1s ease-in-out infinite alternate;
+}
+
+/* Flicker animation for lights on game start or reset */
+@keyframes flicker {
+    0% { opacity: 1; }
+    20% { opacity: 0.5; }
+    40% { opacity: 1; }
+    60% { opacity: 0.3; }
+    80% { opacity: 1; }
+    100% { opacity: 1; }
+}
+
+.flicker {
+    animation: flicker 0.5s ease-in-out forwards;
 }
 
 /* Win message style */
